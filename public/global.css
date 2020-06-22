@@ -1,0 +1,79 @@
+@import url("https://fonts.googleapis.com/css2?family=Quicksand:wght@300;500;700&display=swap");
+:root {
+  font-family: "Quicksand", sans-serif;
+  font-weight: 300;
+}
+
+h1,
+h2,
+h3,
+h4,
+h5,
+h6 {
+  font-weight: 700;
+}
+
+input,
+select {
+  font-family: inherit;
+  font-weight: 300;
+}
+
+body {
+  margin: 0;
+  padding: 1rem;
+}
+
+button {
+  background-color: #4db8ff;
+  border: none;
+  padding: 0.5rem 1.5rem;
+  margin-top: 0.24rem;
+  font-size: 1rem;
+  border-radius: 0.25rem;
+  -webkit-box-shadow: 0 0.25rem 0 0 #b3e0ff;
+          box-shadow: 0 0.25rem 0 0 #b3e0ff;
+  font-weight: 500;
+  cursor: pointer;
+  -webkit-transition: 0.25s ease;
+  transition: 0.25s ease;
+  outline: none;
+  color: black;
+}
+
+button.reset, button.stop {
+  color: white;
+  background-color: #ff4d4d;
+  -webkit-box-shadow: 0 0.25rem 0 0 #ffb3b3;
+          box-shadow: 0 0.25rem 0 0 #ffb3b3;
+}
+
+button:hover {
+  -webkit-transform: translateY(0.25rem);
+          transform: translateY(0.25rem);
+  -webkit-box-shadow: 0 0 0 0 transparent;
+          box-shadow: 0 0 0 0 transparent;
+}
+
+#cyclone {
+  border: 0.25rem solid #4db8ff;
+}
+
+#cyclone div {
+  background: radial-gradient(#b3e0ff, #4db8ff);
+  -webkit-box-shadow: 0.25rem 0 0.25rem 0 rgba(0, 0, 0, 0.35);
+          box-shadow: 0.25rem 0 0.25rem 0 rgba(0, 0, 0, 0.35);
+}
+
+#cyclone div.active {
+  background: radial-gradient(#ffb3b3, #ff4d4d) !important;
+}
+
+#cyclone div#target {
+  background: radial-gradient(#fff1b3, #ffde4d);
+}
+
+.danger {
+  color: #ff4d4d;
+}
+/*# sourceMappingURL=global.css.map */
