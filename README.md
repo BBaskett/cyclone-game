@@ -2,6 +2,8 @@
 
 Stop the light on the gold circle and you win! Adjust the settings to adapt to the difficulty of you choice.
 
+[Demo](https://bbaskett-cyclone-game.netlify.app/)
+
 ---
 
 ## Settings
