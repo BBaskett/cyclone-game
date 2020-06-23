@@ -4,13 +4,14 @@
 
 <script>
   import { beforeUpdate } from "svelte";
+  import { fade } from "svelte/transition";
   import { parameters, stats } from "../stores.js";
   $: lightsArray = new Array($parameters.numOfLights);
   $: activeLight = initial;
 
   let winner = false;
   let state = "initial"; // Values: initial, running, stopped
-  let lightInterval;
+  let lightInterval, difficultyInterval;
 
   function checkWinner() {
     const target = document.querySelector("div#target");
@@ -18,6 +19,7 @@
     if (target === active) {
       $stats.wins = $stats.wins + 1;
       $stats.streak = $stats.streak + 1;
+      difficultyInterval = difficultyInterval * 0.9;
       winner = true;
     } else {
       $stats.losses = $stats.losses + 1;
@@ -38,7 +40,7 @@
 
   function handleStart() {
     state = "running";
-    const difficultyInterval =
+    difficultyInterval =
       $parameters.difficulty === "easy"
         ? 500
         : $parameters.difficulty === "medium"
@@ -60,8 +62,8 @@
     width: 350px;
     height: 350px;
     border-radius: 50%;
-    /*  margin: 2rem 0; */
     transform: rotate(-90deg);
+    margin-bottom: 2rem;
   }
 
   div {
@@ -69,7 +71,7 @@
     position: absolute;
     top: 50%;
     left: 50%;
-    margin: -1rem;
+    margin: -0.6rem;
     height: 20px;
     width: 20px;
     border-radius: 50%;
@@ -79,20 +81,19 @@
   }
 </style>
 
+<p>{difficultyInterval}</p>
 <main id="cyclone">
   {#each lightsArray as light, index}
     <div
       class={activeLight === index ? 'active' : ''}
       id={(360 / $parameters.numOfLights) * index === 180 ? 'target' : index}
-      style={`transform: rotate(${(360 / $parameters.numOfLights) * index}deg) translate(179px)`} />
+      style={`transform: rotate(${(360 / $parameters.numOfLights) * index}deg) translate(calc(175px - 50%))`} />
   {/each}
 </main>
 {#if state === 'stopped'}
-  {#if winner}
-    <h1>Winner, Winner, Chicken Dinner!</h1>
-  {:else}
-    <h1>Better luck next time!</h1>
-  {/if}
+  <h1 transition:fade>
+    {winner ? 'Winner, Winner, Chicken Dinner!' : 'Better luck next time!'}
+  </h1>
 {/if}
 {#if state === 'initial'}
   <button class="start" on:click={handleStart}>Start</button>

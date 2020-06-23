@@ -8,11 +8,6 @@
   import Parameters from "./components/Parameters.svelte";
   import { parameters, stats } from "./stores.js";
 
-  /* TODO
-  - Add the ability to save and load saves instead of automatically backing up to storage
-  - Speed up the game on every subsequent win
-  */
-
   let lastVisit;
 
   function unloadHandler() {
@@ -38,22 +33,6 @@
 </script>
 
 <style>
-  /* main {
-    display: flex;
-    flex-direction: column;
-    justify-content: center;
-    align-items: center;
-    flex: auto;
-  }
-
-  footer {
-    position: fixed;
-    width: 100%;
-    bottom: 0;
-    color: hsl(0, 0%, 75%);
-    text-align: center;
-  } */
-
   header {
     padding: 1rem 1rem 0 1rem;
     margin-bottom: 1rem;
