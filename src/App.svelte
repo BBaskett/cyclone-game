@@ -1,21 +1,16 @@
 <script>
-  export let storageName, defaultParameters;
+  export let storageName, defaultValues;
 
   import { onMount } from "svelte";
 
   import Counter from "./components/Counter.svelte";
   import Cyclone from "./components/Cyclone.svelte";
   import Parameters from "./components/Parameters.svelte";
-  import { acceleration, highScore, parameters } from "./stores.js";
+  import { parameters, stats } from "./stores.js";
 
   /* TODO
   - Add the ability to save and load saves instead of automatically backing up to storage
-  - Use JS to produce the CSS for the lights around the circle
-  - Create global styles for buttons and such
-  - Add metrics for: total plays, total wins, win percentage
   - Speed up the game on every subsequent win
-  - Adjust siing of the cyclone to be responsive
-  - Stop button needs to interject the interval so that it stops immediately
   */
 
   let lastVisit;
@@ -25,7 +20,7 @@
       storageName,
       JSON.stringify({
         lastVisit: Date.now(),
-        highScore: $highScore,
+        stats: $stats,
         parameters: $parameters
       })
     );
@@ -35,7 +30,7 @@
     if (window.localStorage.getItem(storageName) !== null) {
       const storage = JSON.parse(window.localStorage.getItem(storageName));
       $parameters = storage.parameters;
-      $highScore = storage.highScore;
+      $stats = storage.stats;
       lastVisit = new Date(storage.lastVisit).toDateString();
       return console.log("Session loaded from storage");
     }
@@ -43,7 +38,29 @@
 </script>
 
 <style>
+  /* main {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    flex: auto;
+  }
+
+  footer {
+    position: fixed;
+    width: 100%;
+    bottom: 0;
+    color: hsl(0, 0%, 75%);
+    text-align: center;
+  } */
+
+  header {
+    padding: 1rem 1rem 0 1rem;
+    margin-bottom: 1rem;
+  }
+
   main {
+    flex: 2 1 auto;
     display: flex;
     flex-direction: column;
     justify-content: center;
@@ -51,11 +68,16 @@
   }
 
   footer {
-    position: fixed;
-    width: 100%;
-    bottom: 0;
+    padding: 0 1rem 1rem 1rem;
+    margin-top: 1rem;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
     text-align: center;
-    color: hsl(0, 0%, 75%);
+  }
+
+  footer > p {
+    font-size: 0.6rem;
   }
 </style>
 
@@ -63,13 +85,13 @@
 
 <header>
   <Counter />
-  <Parameters defaults={defaultParameters} storage={storageName} />
 </header>
 <main>
   <Cyclone />
 </main>
 <footer>
+  <Parameters defaults={defaultValues} storage={storageName} />
   {#if lastVisit}
-    <h6>Last Visited {lastVisit}</h6>
+    <p>Last Visited {lastVisit}</p>
   {/if}
 </footer>

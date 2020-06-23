@@ -4,7 +4,7 @@
 
 <script>
   import { beforeUpdate } from "svelte";
-  import { acceleration, highScore, parameters } from "../stores.js";
+  import { parameters, stats } from "../stores.js";
   $: lightsArray = new Array($parameters.numOfLights);
   $: activeLight = initial;
 
@@ -16,9 +16,14 @@
     const target = document.querySelector("div#target");
     const active = document.querySelector("div.active");
     if (target === active) {
-      $highScore = $highScore + 1;
-      return (winner = true);
+      $stats.wins = $stats.wins + 1;
+      $stats.streak = $stats.streak + 1;
+      winner = true;
+    } else {
+      $stats.losses = $stats.losses + 1;
+      $stats.streak = 0;
     }
+    return ($stats.plays = $stats.plays + 1);
   }
 
   function handleStop() {
@@ -52,18 +57,11 @@
 <style>
   #cyclone {
     position: relative;
-    width: 60vh; /* 24rem */
-    max-width: 80vw;
-    height: 60vh; /* 24rem */
-    max-height: 80vw;
-    /* padding: 2.8rem; */ /* 2.8rem */
+    width: 350px;
+    height: 350px;
     border-radius: 50%;
-    margin: 1.75em auto 0;
+    /*  margin: 2rem 0; */
     transform: rotate(-90deg);
-  }
-
-  section {
-    margin-top: 2rem;
   }
 
   div {
@@ -72,8 +70,8 @@
     top: 50%;
     left: 50%;
     margin: -1rem;
-    height: 2.5vh; /* 2rem */
-    width: 2.5vh; /* 2rem */
+    height: 20px;
+    width: 20px;
     border-radius: 50%;
     border: 1px solid rgba(0, 0, 0, 0.25);
     transition: 0.25s ease;
@@ -81,28 +79,25 @@
   }
 </style>
 
+<main id="cyclone">
+  {#each lightsArray as light, index}
+    <div
+      class={activeLight === index ? 'active' : ''}
+      id={(360 / $parameters.numOfLights) * index === 180 ? 'target' : index}
+      style={`transform: rotate(${(360 / $parameters.numOfLights) * index}deg) translate(179px)`} />
+  {/each}
+</main>
 {#if state === 'stopped'}
   {#if winner}
     <h1>Winner, Winner, Chicken Dinner!</h1>
   {:else}
     <h1>Better luck next time!</h1>
   {/if}
-{:else}
-  <main id="cyclone">
-    {#each lightsArray as light, index}
-      <div
-        class={activeLight === index ? 'active' : ''}
-        id={(360 / $parameters.numOfLights) * index === 180 ? 'target' : index}
-        style={window.innerHeight > window.innerWidth ? `transform: rotate(${(360 / $parameters.numOfLights) * index}deg) translate(40vw)` : `transform: rotate(${(360 / $parameters.numOfLights) * index}deg) translate(30vh)`} />
-    {/each}
-  </main>
 {/if}
-<section>
-  {#if state === 'initial'}
-    <button class="start" on:click={handleStart}>Start</button>
-  {:else if state === 'running'}
-    <button class="stop" on:click={handleStop}>Stop</button>
-  {:else}
-    <button class="reset" on:click={handleReset}>Reset</button>
-  {/if}
-</section>
+{#if state === 'initial'}
+  <button class="start" on:click={handleStart}>Start</button>
+{:else if state === 'running'}
+  <button class="stop" on:click={handleStop}>Stop</button>
+{:else}
+  <button class="reset" on:click={handleReset}>Reset</button>
+{/if}
