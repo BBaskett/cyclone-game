@@ -5,10 +5,12 @@
 
   import Counter from "./components/Counter.svelte";
   import Cyclone from "./components/Cyclone.svelte";
+  import Modal from "./components/Modal.svelte";
   import Parameters from "./components/Parameters.svelte";
-  import { parameters, stats } from "./stores.js";
+  import { parameters, stats, _showSettings } from "./stores.js";
 
   let lastVisit;
+  let settings = false;
 
   function unloadHandler() {
     return window.localStorage.setItem(
@@ -36,8 +38,12 @@
   header {
     padding: 1rem 1rem 0 1rem;
     margin-bottom: 1rem;
+    display: block;
   }
 
+  p {
+    text-align: center;
+  }
   main {
     flex: 2 1 auto;
     display: flex;
@@ -53,10 +59,11 @@
     flex-direction: column;
     justify-content: center;
     text-align: center;
+    font-size: 0.75rem;
   }
 
-  footer > p {
-    font-size: 0.6rem;
+  .text-button {
+    font-size: inherit;
   }
 </style>
 
@@ -64,13 +71,15 @@
 
 <header>
   <Counter />
+  <p>Stop the red light on the gold light to win!</p>
 </header>
 <main>
   <Cyclone />
 </main>
 <footer>
-  <Parameters defaults={defaultValues} storage={storageName} />
-  {#if lastVisit}
-    <p>Last Visited {lastVisit}</p>
-  {/if}
+  <button class="text-button" on:click={() => ($_showSettings = true)}>
+    Settings
+  </button>
 </footer>
+<Parameters defaults={defaultValues} storage={storageName} {lastVisit} />
+<Modal />

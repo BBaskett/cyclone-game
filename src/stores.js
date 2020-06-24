@@ -10,3 +10,6 @@ export const parameters = writable({
   difficulty: "easy",
   numOfLights: 36,
 });
+export const _showSettings = writable(false);
+export const _progress = writable(0);
+export const _message = writable(null);

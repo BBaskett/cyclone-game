@@ -1,12 +1,10 @@
 <script>
-  export let defaults, storage;
+  export let defaults, storage, lastVisit;
 
   import { afterUpdate, beforeUpdate } from "svelte";
   import { slide, fly } from "svelte/transition";
   import { backInOut } from "svelte/easing";
-  import { parameters, stats } from "../stores.js";
-
-  let display = false;
+  import { parameters, stats, _showSettings } from "../stores.js";
 
   function resetScores() {
     if (window.confirm("Are you sure you want to reset the scores?")) {
@@ -35,140 +33,159 @@
         parameters: $parameters
       })
     );
-    display = !display;
-    return window.location.reload(false);
   }
 
-  // No need for keypress validation
-  /* function validateKeypress(event) {
+  function validateKeypress(event) {
+    // Validate whether the keypress is within the parameters
     if (
       !event.code.includes("Digit") ||
       (event.key + event.target.value).length > 2 ||
-      (event.target.value.length === 0 &&
-        (event.key > 3 || event.key === "0")) ||
+      (event.target.value.length === 0 && event.key === "0") ||
+      (event.target.value.length === 1 && event.target.value > 3) ||
       (event.target.value.length > 0 &&
         event.target.value[0] === "3" &&
         event.key > 6)
     ) {
       return event.preventDefault();
     }
-  } */
+  }
+
+  function onBlur(event) {
+    // If the value is not even, disregard
+    if (event.target.value % 2 !== 0 || event.target.value.length === 0) {
+      return event.target.classList.add("error");
+    } else {
+      if (event.target.className.includes("error")) {
+        return event.target.classList.remove("error");
+      }
+    }
+  }
+
+  function closeHandler(event) {
+    const numOfLightsInput = document.querySelector(
+      'input[name="num-of-lights"]'
+    );
+    // Don't close if input is in error state
+    if (numOfLightsInput.className.includes("error")) {
+      return;
+    }
+    return ($_showSettings = false);
+  }
 </script>
 
 <style>
+  @media (min-width: 999px) {
+    form {
+      width: 50vw !important;
+      border-right: 1px solid hsl(0, 0%, 65%);
+      box-shadow: 0.25rem 0 1rem 0 hsla(0, 0%, 50%, 0.35);
+    }
+  }
   form {
     position: absolute;
     background-color: hsl(0, 0%, 100%);
     top: 0;
     left: 0;
-    width: 50vw;
-    min-width: 275px;
+    width: 100vw;
     height: 100vh;
+    box-sizing: border-box;
     padding: 2rem;
-    box-shadow: 0.5rem 0 1rem 0 hsla(0, 0%, 65%, 0.35);
-    border-right: 1px solid hsl(0, 0%, 65%);
     z-index: 100;
   }
 
-  fieldset {
-    border: 1px solid hsl(0, 0%, 65%);
-    border-radius: 0.35rem;
-    padding: 0.5rem;
-    margin: 0;
+  .row {
     display: flex;
-    justify-content: center;
+    justify-content: space-between;
     align-items: center;
-    background: linear-gradient(
-      to bottom,
-      hsl(0, 0%, 95%),
-      hsl(0, 0%, 100%),
-      hsl(0, 0%, 95%)
-    );
-    box-shadow: inset 0 0 0.75rem 0 rgba(200, 200, 200, 0.35);
+    flex-wrap: wrap;
+    padding: 1rem;
   }
 
-  fieldset > label {
+  .row.button-row {
+    justify-content: space-around;
+    flex-wrap: wrap;
+  }
+
+  .row + .row {
+    border-top: 1px solid hsl(0, 0%, 85%);
+  }
+
+  .row > .row-label {
     font-weight: 700;
-    margin-bottom: 0.5rem;
   }
 
-  fieldset > *:not(label) {
-    margin: auto;
+  .row > .break {
+    flex-basis: 100%;
+    height: 0;
   }
 
-  button + button {
-    margin: 0.5rem auto 0;
-  }
-
-  a {
-    color: inherit;
-    text-decoration: none;
-    position: relative;
-    cursor: pointer;
-    flex: 0 0 auto;
-    margin: auto;
-  }
-
-  a::after {
-    content: "";
-    width: 0%;
-    height: 1px;
-    background-color: black;
-    display: block;
-    position: absolute;
-    transition: 0.25s ease;
-  }
-
-  a:hover::after {
-    width: 100%;
+  .row > .description {
+    font-size: 0.75rem;
+    margin-top: 0.25rem;
   }
 
   #close {
     cursor: pointer;
+    font-size: 1.25rem;
     font-weight: 700;
     text-align: right;
     margin-bottom: 1rem;
   }
+
+  #lastVisit {
+    font-size: 0.75rem;
+    font-weight: 300;
+    color: hsl(0, 0%, 50%);
+  }
 </style>
 
-<a on:click={() => (display = true)}>Settings</a>
-
-{#if display}
+{#if $_showSettings}
   <form
     on:submit|preventDefault
     transition:fly={{ x: -100, easing: backInOut }}>
-    <div id="close" on:click={() => (display = false)}>X</div>
-    <fieldset>
-      <label for="num-of-lights">Number of Lights</label>
+    <div id="close" on:click={closeHandler} title="close">x</div>
+    <h1>
+      Settings
+      {#if lastVisit}
+        <div id="lastVisit">Last visited {lastVisit}</div>
+      {/if}
+    </h1>
+    <div class="row">
+      <span class="row-label">Number of Lights</span>
       <input
         name="num-of-lights"
         type="number"
         min="2"
         max="36"
         step="2"
+        pattern="[0-9]*"
         bind:value={$parameters.numOfLights}
-        on:keypress|preventDefault />
-    </fieldset>
-    <hr />
-    <fieldset>
-      <label for="difficulty">Difficulty</label>
-      <select
-        name="difficulty"
-        id="difficulty"
-        bind:value={$parameters.difficulty}>
+        on:keypress={validateKeypress}
+        on:blur={onBlur} />
+      <div class="break" />
+      <span class="description">
+        The number of lights in the cyclone (Must be even! Min: 2, Max: 36).
+      </span>
+    </div>
+    <div class="row">
+      <span class="row-label">Difficulty</span>
+      <select name="difficulty" bind:value={$parameters.difficulty}>
         <option value="easy">Easy</option>
         <option value="medium">Medium</option>
         <option value="hard">Hard</option>
         <option value="impossible">Impossible</option>
       </select>
-    </fieldset>
-    <hr />
-    <fieldset>
+      <div class="break" />
+      <span class="description">
+        The speed at which the lights change increases (in no specific
+        linearity) with difficulty.
+      </span>
+    </div>
+    <div class="row button-row">
       <button class="reset" on:click={resetScores}>Reset Scores</button>
       <button class="reset" on:click={resetDefault}>
         Reset Default Settings
       </button>
-    </fieldset>
-
+    </div>
   </form>
 {/if}

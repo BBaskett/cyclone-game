@@ -1,7 +1,5 @@
 @import url("https://fonts.googleapis.com/css2?family=Quicksand:wght@300;500;700&display=swap");
 :root {
-  margin: 0;
-  padding: 0;
   -webkit-box-sizing: border-box;
           box-sizing: border-box;
   font-size: 16px;
@@ -14,6 +12,8 @@ html {
 }
 
 body {
+  margin: 0;
+  padding: 0;
   margin: inherit;
   padding: inherit;
   height: 100%;
@@ -39,9 +39,16 @@ input,
 select {
   font-family: inherit;
   font-weight: 300;
+  font-size: 1rem;
+}
+
+input.error,
+select.error {
+  background-color: #ffb3b3;
 }
 
 button {
+  font-family: inherit;
   background-color: #4db8ff;
   border: none;
   padding: 0.5rem 1.5rem;
@@ -52,11 +59,59 @@ button {
   cursor: pointer;
   outline: none;
   color: black;
+  position: relative;
+  width: 250px;
 }
 
-button.reset, button.stop {
+button.stop {
   color: white;
   background-color: #ff4d4d;
+}
+
+button.reset {
+  background-color: #ffde4d;
+}
+
+button.text-button {
+  padding: 0;
+  margin: auto;
+  background-color: transparent;
+  border-radius: 0;
+  font-weight: 300;
+  width: auto;
+}
+
+button.text-button::after {
+  content: "";
+  width: 0%;
+  height: 1px;
+  background-color: black;
+  display: block;
+  position: absolute;
+  -webkit-transition: 0.25s ease;
+  transition: 0.25s ease;
+}
+
+button.text-button:hover::after {
+  width: 100%;
+}
+
+.modal {
+  background-color: white;
+  border-radius: 0 0 0.25rem 0.25rem;
+  border-bottom: 1px solid #bfbfbf;
+  -webkit-box-shadow: 0 0.25rem 0.25rem 0 rgba(128, 128, 128, 0.35);
+          box-shadow: 0 0.25rem 0.25rem 0 rgba(128, 128, 128, 0.35);
+  padding: 1rem;
+  position: absolute;
+  top: 0;
+  left: 50%;
+  -webkit-transform: translateX(-50%);
+          transform: translateX(-50%);
+  z-index: 1000;
+  max-width: 500px;
+  width: 100%;
+  text-align: center;
 }
 
 #cyclone {
