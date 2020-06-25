@@ -5,6 +5,11 @@
 <style>
   table {
     width: 100%;
+    padding: 1rem;
+    border-radius: 0.25rem;
+    background-color: hsl(0, 0%, 95%);
+    box-shadow: 0 0.25rem 0.25rem 0 hsla(0, 0%, 50%, 0.35);
+    border: 1px solid hsl(0, 0%, 65%);
   }
 
   td {
@@ -25,18 +30,8 @@
   <tbody>
     <tr>
       <td>{$stats.plays}</td>
-      <td>
-        {$stats.wins}
-        {#if $stats.plays > 0}
-          ({(($stats.wins / $stats.plays) * 100).toFixed(2)}%)
-        {/if}
-      </td>
-      <td>
-        {$stats.losses}
-        {#if $stats.plays > 0}
-          ({(($stats.losses / $stats.plays) * 100).toFixed(2)}%)
-        {/if}
-      </td>
+      <td>{$stats.wins}</td>
+      <td>{$stats.losses}</td>
       <td>{$stats.streak}</td>
     </tr>
   </tbody>

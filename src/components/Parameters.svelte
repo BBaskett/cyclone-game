@@ -170,10 +170,10 @@
     <div class="row">
       <span class="row-label">Difficulty</span>
       <select name="difficulty" bind:value={$parameters.difficulty}>
-        <option value="easy">Easy</option>
-        <option value="medium">Medium</option>
-        <option value="hard">Hard</option>
-        <option value="impossible">Impossible</option>
+        <option value="Easy">Easy</option>
+        <option value="Medium">Medium</option>
+        <option value="Hard">Hard</option>
+        <option value="Impossible">Impossible</option>
       </select>
       <div class="break" />
       <span class="description">

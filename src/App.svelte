@@ -36,8 +36,7 @@
 
 <style>
   header {
-    padding: 1rem 1rem 0 1rem;
-    margin-bottom: 1rem;
+    padding: 1rem;
     display: block;
   }
 
@@ -53,12 +52,12 @@
   }
 
   footer {
-    padding: 0 1rem 1rem 1rem;
-    margin-top: 1rem;
+    padding: 1rem;
     display: flex;
     flex-direction: column;
     justify-content: center;
     text-align: center;
+    background-color: hsl(0, 0%, 95%);
   }
 </style>
 

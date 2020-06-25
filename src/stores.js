@@ -7,7 +7,7 @@ export const stats = writable({
   streak: 0,
 });
 export const parameters = writable({
-  difficulty: "easy",
+  difficulty: "Easy",
   numOfLights: 36,
 });
 export const _showSettings = writable(false);

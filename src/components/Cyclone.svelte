@@ -4,7 +4,6 @@
 
 <script>
   import { beforeUpdate } from "svelte";
-  import { fade, slide } from "svelte/transition";
   import { _message, parameters, stats } from "../stores.js";
 
   $: lightsArray = new Array($parameters.numOfLights);
@@ -12,7 +11,13 @@
 
   let winner = false;
   let state = "initial"; // Values: initial, running, stopped
-  let lightInterval;
+  let lightInterval,
+    level = $parameters.difficulty;
+
+  $: level =
+    $stats.streak > 0
+      ? $parameters.difficulty + "-er".repeat($stats.streak)
+      : $parameters.difficulty;
 
   function checkWinner() {
     const target = document.querySelector("div#target");
@@ -45,11 +50,11 @@
   function handleStart() {
     state = "running";
     let difficultyInterval =
-      $parameters.difficulty === "easy"
+      $parameters.difficulty === "Easy"
         ? 500
-        : $parameters.difficulty === "medium"
+        : $parameters.difficulty === "Medium"
         ? 200
-        : $parameters.difficulty === "hard"
+        : $parameters.difficulty === "Hard"
         ? 75
         : 10;
     if ($stats.streak > 0) {
@@ -77,6 +82,14 @@
     border: 1px solid hsl(0, 0%, 65%);
     transition: 0.25s ease;
   }
+
+  #level {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%) rotate(90deg);
+    text-align: center;
+  }
 </style>
 
 <div
@@ -88,24 +101,18 @@
       class={index === activeLight ? 'circle active' : 'circle'}
       style={`height: ${window.innerHeight < window.innerWidth ? (window.innerHeight * 0.75) / lightsArray.length + 'px' : (window.innerWidth * 0.75) / lightsArray.length + 'px'}; width: ${window.innerHeight < window.innerWidth ? (window.innerHeight * 0.75) / lightsArray.length + 'px' : (window.innerWidth * 0.75) / lightsArray.length + 'px'}; top: calc(50% - ${window.innerHeight < window.innerWidth ? (window.innerHeight * 0.75) / lightsArray.length / 2 + 'px' : (window.innerWidth * 0.75) / lightsArray.length / 2 + 'px'}); left: calc(50% - ${window.innerHeight < window.innerWidth ? (window.innerHeight * 0.75) / lightsArray.length / 2 + 'px' : (window.innerWidth * 0.75) / lightsArray.length / 2 + 'px'}); transform: rotate(${(360 / lightsArray.length) * index}deg) translateX(${window.innerHeight < window.innerWidth ? window.innerHeight * 0.375 : window.innerWidth * 0.375}px);`} />
   {/each}
+  <div id="level">
+    <strong>Level:</strong>
+    {level}
+  </div>
 </div>
 
 {#if state === 'initial'}
-  <button
-    class="start"
-    on:click={handleStart}
-    transition:slide={{ duration: 100 }}>
-    Start
-  </button>
+  <button class="start" on:click={handleStart}>Start</button>
 {:else if state === 'running'}
-  <button
-    class="stop"
-    on:click={handleStop}
-    transition:slide={{ duration: 100 }}>
-    Stop
-  </button>
+  <button class="stop" on:click={handleStop}>Stop</button>
 {:else}
-  <button class="reset" on:click={handleReset} transition:slide>
+  <button class="reset" on:click={handleReset}>
     {$stats.streak > 0 ? 'Next Level' : 'Reset'}
   </button>
 {/if}
