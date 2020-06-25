@@ -114,22 +114,40 @@ button.text-button:hover::after {
   text-align: center;
 }
 
-#cyclone {
-  border: none;
+#cycloneContainer {
+  position: relative;
+  border: 1px solid rgba(0, 0, 0, 0.1);
+  border-radius: 50%;
 }
 
-#cyclone div {
+#cycloneContainer .circle {
+  position: absolute;
+  height: 32px;
+  width: 32px;
+  border-radius: 50%;
+  top: 50%;
+  left: 50%;
   background: radial-gradient(#b3e0ff, #4db8ff);
-  -webkit-box-shadow: 0.25rem 0 0.25rem 0 rgba(0, 0, 0, 0.35);
-          box-shadow: 0.25rem 0 0.25rem 0 rgba(0, 0, 0, 0.35);
 }
 
-#cyclone div.active {
-  background: radial-gradient(#ffb3b3, #ff4d4d) !important;
+#cycloneContainer .circle.active {
+  background: radial-gradient(#ffb3b3, #ff4d4d);
 }
 
-#cyclone div#target {
+#cycloneContainer .circle.target {
   background: radial-gradient(#fff1b3, #ffde4d);
+}
+
+#canvas circle {
+  fill: #4db8ff;
+}
+
+#canvas circle.active {
+  fill: #ff4d4d;
+}
+
+#canvas circle.target {
+  fill: #ffde4d;
 }
 
 .danger {

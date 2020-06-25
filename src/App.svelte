@@ -48,7 +48,7 @@
     flex: 2 1 auto;
     display: flex;
     flex-direction: column;
-    justify-content: center;
+    justify-content: space-around;
     align-items: center;
   }
 
@@ -59,11 +59,6 @@
     flex-direction: column;
     justify-content: center;
     text-align: center;
-    font-size: 0.75rem;
-  }
-
-  .text-button {
-    font-size: inherit;
   }
 </style>
 
