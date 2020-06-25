@@ -6,7 +6,7 @@ const app = new App({
     storageName: "light_cyclone",
     defaultValues: {
       parameters: {
-        difficulty: "easy",
+        difficulty: "Easy",
         numOfLights: 36,
       },
       stats: {

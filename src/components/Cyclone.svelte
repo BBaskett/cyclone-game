@@ -6,17 +6,20 @@
   import { beforeUpdate } from "svelte";
   import { _message, parameters, stats } from "../stores.js";
 
-  $: lightsArray = new Array($parameters.numOfLights);
-  $: activeLight = 0;
-
   let winner = false;
   let state = "initial"; // Values: initial, running, stopped
   let lightInterval,
     level = $parameters.difficulty;
+  let dimensionReference =
+    window.innerHeight < window.innerWidth
+      ? window.innerHeight
+      : window.innerWidth;
 
+  $: lightsArray = new Array($parameters.numOfLights);
+  $: activeLight = 0;
   $: level =
     $stats.streak > 0
-      ? $parameters.difficulty + "-er".repeat($stats.streak)
+      ? "Less-".repeat($stats.streak) + $parameters.difficulty
       : $parameters.difficulty;
 
   function checkWinner() {
@@ -81,6 +84,10 @@
     border-radius: 50%;
     border: 1px solid hsl(0, 0%, 65%);
     transition: 0.25s ease;
+    width: 24px;
+    height: 24px;
+    top: calc(50% - 12px);
+    left: calc(50% - 12px);
   }
 
   #level {
@@ -99,7 +106,8 @@
     <div
       id={index === lightsArray.length / 2 ? 'target' : index}
       class={index === activeLight ? 'circle active' : 'circle'}
-      style={`height: ${window.innerHeight < window.innerWidth ? (window.innerHeight * 0.75) / lightsArray.length + 'px' : (window.innerWidth * 0.75) / lightsArray.length + 'px'}; width: ${window.innerHeight < window.innerWidth ? (window.innerHeight * 0.75) / lightsArray.length + 'px' : (window.innerWidth * 0.75) / lightsArray.length + 'px'}; top: calc(50% - ${window.innerHeight < window.innerWidth ? (window.innerHeight * 0.75) / lightsArray.length / 2 + 'px' : (window.innerWidth * 0.75) / lightsArray.length / 2 + 'px'}); left: calc(50% - ${window.innerHeight < window.innerWidth ? (window.innerHeight * 0.75) / lightsArray.length / 2 + 'px' : (window.innerWidth * 0.75) / lightsArray.length / 2 + 'px'}); transform: rotate(${(360 / lightsArray.length) * index}deg) translateX(${window.innerHeight < window.innerWidth ? window.innerHeight * 0.375 : window.innerWidth * 0.375}px);`} />
+      style={`transform: rotate(${(360 / lightsArray.length) * index}deg) translateX(${dimensionReference * 0.375}px);`} />
+    <!-- style={`height: ${window.innerHeight < window.innerWidth ? (window.innerHeight * 0.75) / lightsArray.length + 'px' : (window.innerWidth * 0.75) / lightsArray.length + 'px'}; width: ${window.innerHeight < window.innerWidth ? (window.innerHeight * 0.75) / lightsArray.length + 'px' : (window.innerWidth * 0.75) / lightsArray.length + 'px'}; top: calc(50% - ${window.innerHeight < window.innerWidth ? (window.innerHeight * 0.75) / lightsArray.length / 2 + 'px' : (window.innerWidth * 0.75) / lightsArray.length / 2 + 'px'}); left: calc(50% - ${window.innerHeight < window.innerWidth ? (window.innerHeight * 0.75) / lightsArray.length / 2 + 'px' : (window.innerWidth * 0.75) / lightsArray.length / 2 + 'px'}); transform: rotate(${(360 / lightsArray.length) * index}deg) translateX(${window.innerHeight < window.innerWidth ? window.innerHeight * 0.375 : window.innerWidth * 0.375}px);`} -->
   {/each}
   <div id="level">
     <strong>Level:</strong>
