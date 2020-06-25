@@ -6,7 +6,7 @@
   import Cyclone from "./components/Cyclone.svelte";
   import Modal from "./components/Modal.svelte";
   import Parameters from "./components/Parameters.svelte";
-  import { parameters, stats, _showSettings } from "./stores.js";
+  import { parameters, stats, _message, _showSettings } from "./stores.js";
 
   let lastVisit;
   let settings = false;
@@ -40,9 +40,6 @@
     display: block;
   }
 
-  p {
-    text-align: center;
-  }
   main {
     flex: 2 1 auto;
     display: flex;
@@ -52,12 +49,13 @@
   }
 
   footer {
-    padding: 1rem;
+    padding: 1rem 0;
     display: flex;
-    flex-direction: column;
+    flex-direction: row;
     justify-content: center;
     text-align: center;
     background-color: hsl(0, 0%, 95%);
+    font-size: 0.8rem;
   }
 </style>
 
@@ -65,13 +63,29 @@
 
 <header>
   <Counter />
-  <p>Stop the red light on the gold light to win!</p>
 </header>
 <main>
   <Cyclone />
 </main>
 <footer>
-  <button class="text-button" on:click={() => ($_showSettings = true)}>
+  <button
+    class="text-button"
+    on:click={() => {
+      $_message = '<h1>How to Play</h1><hr/><p>Stop the red light on the gold light to win.</p><p>If you win, the lights will change faster than the previous round.</p>';
+      return setTimeout(() => {
+        $_message = null;
+      }, 3000);
+    }}>
+    How To Play
+  </button>
+  <button
+    class="text-button"
+    on:click={() => {
+      if ($_message !== null) {
+        $_message = null;
+      }
+      return ($_showSettings = true);
+    }}>
     Settings
   </button>
 </footer>

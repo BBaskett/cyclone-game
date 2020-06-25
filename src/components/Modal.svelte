@@ -22,6 +22,8 @@
 
 {#if display}
   <div class="modal" transition:slide>
-    <p>{$_message}</p>
+    <p>
+      {@html $_message}
+    </p>
   </div>
 {/if}

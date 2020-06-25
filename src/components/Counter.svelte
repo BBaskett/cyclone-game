@@ -5,7 +5,7 @@
 <style>
   table {
     width: 100%;
-    padding: 1rem;
+    padding: 0.75rem 1rem;
     border-radius: 0.25rem;
     background-color: hsl(0, 0%, 95%);
     box-shadow: 0 0.25rem 0.25rem 0 hsla(0, 0%, 50%, 0.35);
