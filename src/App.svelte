@@ -2,7 +2,6 @@
   export let storageName, defaultValues;
 
   import { onMount } from "svelte";
-
   import Counter from "./components/Counter.svelte";
   import Cyclone from "./components/Cyclone.svelte";
   import Modal from "./components/Modal.svelte";
@@ -11,6 +10,7 @@
 
   let lastVisit;
   let settings = false;
+  let orientation = window.screen.orientation;
 
   function unloadHandler() {
     return window.localStorage.setItem(

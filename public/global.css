@@ -138,19 +138,27 @@ button.text-button:hover::after {
   background: radial-gradient(#fff1b3, #ffde4d);
 }
 
-#canvas circle {
-  fill: #4db8ff;
+.container .circle {
+  -webkit-box-shadow: 0 0 0.5rem 0.1rem rgba(128, 128, 128, 0.35);
+          box-shadow: 0 0 0.5rem 0.1rem rgba(128, 128, 128, 0.35);
+  background: radial-gradient(#b3e0ff, #4db8ff);
 }
 
-#canvas circle.active {
-  fill: #ff4d4d;
+.container .circle.active {
+  background: radial-gradient(#ffb3b3, #ff4d4d) !important;
 }
 
-#canvas circle.target {
-  fill: #ffde4d;
+.container .circle#target {
+  background: radial-gradient(#fff1b3, #ffde4d);
 }
 
-.danger {
+.red-text {
+  font-weight: 700;
   color: #ff4d4d;
+}
+
+.gold-text {
+  font-weight: 700;
+  color: #ffde4d;
 }
 /*# sourceMappingURL=global.css.map */

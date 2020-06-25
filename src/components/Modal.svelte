@@ -14,6 +14,12 @@
   });
 </script>
 
+<style>
+  p {
+    font-weight: 500;
+  }
+</style>
+
 {#if display}
   <div class="modal" transition:slide>
     <p>{$_message}</p>
