@@ -71,10 +71,10 @@
   <button
     class="text-button"
     on:click={() => {
-      $_message = '<h1>How to Play</h1><hr/><p>Stop the red light on the gold light to win.</p><p>If you win, the lights will change faster than the previous round.</p>';
+      $_message = '<h1>How to Play</h1><hr/><p>Stop the <span class="red-text">red</span> light on the <span class="gold-text">gold</span> light to win.</p><p>If you win, the lights will change faster than the previous round.</p>';
       return setTimeout(() => {
         $_message = null;
-      }, 3000);
+      }, 5000);
     }}>
     How To Play
   </button>
