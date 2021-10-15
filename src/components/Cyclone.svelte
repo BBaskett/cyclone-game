@@ -19,7 +19,7 @@
   $: activeLight = 0;
   $: level =
     $stats.streak > 0
-      ? "Less-".repeat($stats.streak) + $parameters.difficulty
+      ? $parameters.difficulty + ` - Level ${$stats.streak}`
       : $parameters.difficulty;
 
   function checkWinner() {
@@ -71,6 +71,44 @@
   }
 </script>
 
+<div
+  class="container"
+  style={`height: ${
+    window.innerHeight < window.innerWidth
+      ? window.innerHeight * 0.75
+      : window.innerWidth * 0.75
+  }px; width: ${
+    window.innerHeight < window.innerWidth
+      ? window.innerHeight * 0.75
+      : window.innerWidth * 0.75
+  }px`}
+>
+  {#each lightsArray as light, index}
+    <div
+      id={index === lightsArray.length / 2 ? "target" : index}
+      class={index === activeLight ? "circle active" : "circle"}
+      style={`transform: rotate(${
+        (360 / lightsArray.length) * index
+      }deg) translateX(${dimensionReference * 0.375}px);`}
+    />
+    <!-- style={`height: ${window.innerHeight < window.innerWidth ? (window.innerHeight * 0.75) / lightsArray.length + 'px' : (window.innerWidth * 0.75) / lightsArray.length + 'px'}; width: ${window.innerHeight < window.innerWidth ? (window.innerHeight * 0.75) / lightsArray.length + 'px' : (window.innerWidth * 0.75) / lightsArray.length + 'px'}; top: calc(50% - ${window.innerHeight < window.innerWidth ? (window.innerHeight * 0.75) / lightsArray.length / 2 + 'px' : (window.innerWidth * 0.75) / lightsArray.length / 2 + 'px'}); left: calc(50% - ${window.innerHeight < window.innerWidth ? (window.innerHeight * 0.75) / lightsArray.length / 2 + 'px' : (window.innerWidth * 0.75) / lightsArray.length / 2 + 'px'}); transform: rotate(${(360 / lightsArray.length) * index}deg) translateX(${window.innerHeight < window.innerWidth ? window.innerHeight * 0.375 : window.innerWidth * 0.375}px);`} -->
+  {/each}
+  <div id="level">
+    <strong>Level:</strong>
+    {level}
+  </div>
+</div>
+
+{#if state === "initial"}
+  <button class="start" on:click={handleStart}>Start</button>
+{:else if state === "running"}
+  <button class="stop" on:click={handleStop}>Stop</button>
+{:else}
+  <button class="reset" on:click={handleReset}>
+    {$stats.streak > 0 ? "Next Level" : "Reset"}
+  </button>
+{/if}
+
 <style>
   .container {
     position: relative;
@@ -98,29 +136,3 @@
     text-align: center;
   }
 </style>
-
-<div
-  class="container"
-  style={`height: ${window.innerHeight < window.innerWidth ? window.innerHeight * 0.75 : window.innerWidth * 0.75}px; width: ${window.innerHeight < window.innerWidth ? window.innerHeight * 0.75 : window.innerWidth * 0.75}px`}>
-  {#each lightsArray as light, index}
-    <div
-      id={index === lightsArray.length / 2 ? 'target' : index}
-      class={index === activeLight ? 'circle active' : 'circle'}
-      style={`transform: rotate(${(360 / lightsArray.length) * index}deg) translateX(${dimensionReference * 0.375}px);`} />
-    <!-- style={`height: ${window.innerHeight < window.innerWidth ? (window.innerHeight * 0.75) / lightsArray.length + 'px' : (window.innerWidth * 0.75) / lightsArray.length + 'px'}; width: ${window.innerHeight < window.innerWidth ? (window.innerHeight * 0.75) / lightsArray.length + 'px' : (window.innerWidth * 0.75) / lightsArray.length + 'px'}; top: calc(50% - ${window.innerHeight < window.innerWidth ? (window.innerHeight * 0.75) / lightsArray.length / 2 + 'px' : (window.innerWidth * 0.75) / lightsArray.length / 2 + 'px'}); left: calc(50% - ${window.innerHeight < window.innerWidth ? (window.innerHeight * 0.75) / lightsArray.length / 2 + 'px' : (window.innerWidth * 0.75) / lightsArray.length / 2 + 'px'}); transform: rotate(${(360 / lightsArray.length) * index}deg) translateX(${window.innerHeight < window.innerWidth ? window.innerHeight * 0.375 : window.innerWidth * 0.375}px);`} -->
-  {/each}
-  <div id="level">
-    <strong>Level:</strong>
-    {level}
-  </div>
-</div>
-
-{#if state === 'initial'}
-  <button class="start" on:click={handleStart}>Start</button>
-{:else if state === 'running'}
-  <button class="stop" on:click={handleStop}>Stop</button>
-{:else}
-  <button class="reset" on:click={handleReset}>
-    {$stats.streak > 0 ? 'Next Level' : 'Reset'}
-  </button>
-{/if}
