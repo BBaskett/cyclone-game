@@ -30,7 +30,7 @@
       JSON.stringify({
         lastVisit: Date.now(),
         stats: $stats,
-        parameters: $parameters
+        parameters: $parameters,
       })
     );
   }
@@ -71,7 +71,70 @@
     }
     return ($_showSettings = false);
   }
+
+  function updateDifficulty(event) {
+    if ($stats.streak > 0) {
+      $stats.streak = 0;
+    }
+  }
 </script>
+
+{#if $_showSettings}
+  <form
+    on:submit|preventDefault
+    transition:fly={{ x: -100, easing: backInOut }}
+  >
+    <div id="close" on:click={closeHandler} title="close">x</div>
+    <h1>
+      Settings
+      {#if lastVisit}
+        <div id="lastVisit">Last visited {lastVisit}</div>
+      {/if}
+    </h1>
+    <div class="row">
+      <span class="row-label">Number of Lights</span>
+      <input
+        name="num-of-lights"
+        type="number"
+        min="2"
+        max="36"
+        step="2"
+        pattern="[0-9]*"
+        bind:value={$parameters.numOfLights}
+        on:keypress={validateKeypress}
+        on:blur={onBlur}
+      />
+      <div class="break" />
+      <span class="description">
+        The number of lights in the cyclone (Must be even! Min: 2, Max: 36).
+      </span>
+    </div>
+    <div class="row">
+      <span class="row-label">Difficulty</span>
+      <select
+        name="difficulty"
+        bind:value={$parameters.difficulty}
+        on:change={updateDifficulty}
+      >
+        <option value="Easy">Easy</option>
+        <option value="Medium">Medium</option>
+        <option value="Hard">Hard</option>
+        <option value="Impossible">Impossible</option>
+      </select>
+      <div class="break" />
+      <span class="description">
+        The speed at which the lights change increases (in no specific
+        linearity) with difficulty.
+      </span>
+    </div>
+    <div class="row button-row">
+      <button class="reset" on:click={resetScores}>Reset Scores</button>
+      <button class="reset" on:click={resetDefault}>
+        Reset Default Settings
+      </button>
+    </div>
+  </form>
+{/if}
 
 <style>
   @media (min-width: 999px) {
@@ -138,54 +201,3 @@
     color: hsl(0, 0%, 50%);
   }
 </style>
-
-{#if $_showSettings}
-  <form
-    on:submit|preventDefault
-    transition:fly={{ x: -100, easing: backInOut }}>
-    <div id="close" on:click={closeHandler} title="close">x</div>
-    <h1>
-      Settings
-      {#if lastVisit}
-        <div id="lastVisit">Last visited {lastVisit}</div>
-      {/if}
-    </h1>
-    <div class="row">
-      <span class="row-label">Number of Lights</span>
-      <input
-        name="num-of-lights"
-        type="number"
-        min="2"
-        max="36"
-        step="2"
-        pattern="[0-9]*"
-        bind:value={$parameters.numOfLights}
-        on:keypress={validateKeypress}
-        on:blur={onBlur} />
-      <div class="break" />
-      <span class="description">
-        The number of lights in the cyclone (Must be even! Min: 2, Max: 36).
-      </span>
-    </div>
-    <div class="row">
-      <span class="row-label">Difficulty</span>
-      <select name="difficulty" bind:value={$parameters.difficulty}>
-        <option value="Easy">Easy</option>
-        <option value="Medium">Medium</option>
-        <option value="Hard">Hard</option>
-        <option value="Impossible">Impossible</option>
-      </select>
-      <div class="break" />
-      <span class="description">
-        The speed at which the lights change increases (in no specific
-        linearity) with difficulty.
-      </span>
-    </div>
-    <div class="row button-row">
-      <button class="reset" on:click={resetScores}>Reset Scores</button>
-      <button class="reset" on:click={resetDefault}>
-        Reset Default Settings
-      </button>
-    </div>
-  </form>
-{/if}
