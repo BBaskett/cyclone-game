@@ -21,7 +21,7 @@
 </style>
 
 {#if display}
-  <div class="modal" transition:slide>
+  <div class="modal" transition:slide|global>
     <p>
       {@html $_message}
     </p>
