@@ -82,7 +82,7 @@
 {#if $_showSettings}
   <form
     on:submit|preventDefault
-    transition:fly={{ x: -100, easing: backInOut }}
+    transition:fly|global={{ x: -100, easing: backInOut }}
   >
     <div id="close" on:click={closeHandler} title="close">x</div>
     <h1>
