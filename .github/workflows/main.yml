@@ -16,15 +16,15 @@ jobs:
   build-svelte-site:
     runs-on: ubuntu-latest
     steps:
+      - name: checkout
+        uses: actions/checkout@v4
       - name: Install Node.js
         uses: actions/setup-node@v4
         with:
           node-version: 20
           cache: npm
-      - name: checkout
-        uses: actions/checkout@v4
       - name: install dependencies
-        run: npm run install
+        run: npm install
       - name: build svelte site
         env:
           BASE_PATH: "/${{ github.event.repository.name }}"
